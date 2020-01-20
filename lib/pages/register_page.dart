@@ -6,6 +6,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   Widget _showTitile() {
     return Text('Register', style: Theme.of(context).textTheme.headline);
   }
@@ -14,6 +15,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
+        validator: (val) => val.length < 6 ? 'Username is too short':null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Username',
@@ -30,6 +32,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
+        validator: (val) => !val.contains('@') ? 'Invalid Email':null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Email',
@@ -46,6 +49,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
+        validator: (val) => val.length < 6 ? 'Password is too short':null,
         obscureText: true,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -77,7 +81,7 @@ class RegisterPageState extends State<RegisterPage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0))),
                           color: Theme.of(context).primaryColor,
-                          onPressed: () => print('Submit'),
+                          onPressed: () => _submit()
                         ),
                         FlatButton(
                           child: Text('Existing User? Login'),
@@ -86,6 +90,14 @@ class RegisterPageState extends State<RegisterPage> {
                       ],
                     ),
                   );
+  }
+
+  void _submit() {
+    if (_formKey.currentState.validate()){
+      print('form valid');
+    } else{
+      print('Form invalid');
+    }
   }
 
   @override
@@ -99,6 +111,7 @@ class RegisterPageState extends State<RegisterPage> {
         child: Center(
           child: SingleChildScrollView(
             child: Form(
+              key: _formKey,
               child: Column(
                 children: <Widget>[
                   _showTitile(),
