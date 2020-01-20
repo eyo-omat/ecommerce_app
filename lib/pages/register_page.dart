@@ -43,11 +43,30 @@ class RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.0),
                     child: TextFormField(
+                      obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                           labelText: 'Password',
                           hintText: 'Enter password, min length 6',
                           icon: Icon(Icons.lock, color: Colors.grey,)),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 20.0),
+                    child: Column(
+                      children: <Widget>[
+                        RaisedButton(
+                          child: Text('Submit', style: Theme.of(context).textTheme.body1.copyWith(color: Colors.black),),
+                          elevation: 8.0,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                          color: Theme.of(context).primaryColor,
+                          onPressed: () => print('Submit'),
+                        ),
+                        FlatButton(
+                          child: Text('Existing User? Login'),
+                          onPressed: () => print('login'),
+                        )
+                      ],
                     ),
                   ),
                 ],
