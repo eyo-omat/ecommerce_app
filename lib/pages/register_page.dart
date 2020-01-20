@@ -7,6 +7,9 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
+
+  String _username, _email, _password;
+
   Widget _showTitile() {
     return Text('Register', style: Theme.of(context).textTheme.headline);
   }
@@ -15,6 +18,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
+        onSaved: (val) => _username = val,
         validator: (val) => val.length < 6 ? 'Username is too short':null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -33,6 +37,7 @@ class RegisterPageState extends State<RegisterPage> {
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
         validator: (val) => !val.contains('@') ? 'Invalid Email':null,
+        onSaved: (val) => _email = val,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Email',
@@ -50,6 +55,7 @@ class RegisterPageState extends State<RegisterPage> {
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
         validator: (val) => val.length < 6 ? 'Password is too short':null,
+        onSaved: (val) => _password = val,
         obscureText: true,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -93,8 +99,11 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _submit() {
-    if (_formKey.currentState.validate()){
-      print('form valid');
+    final form = _formKey.currentState;
+    
+    if (form.validate()){
+      form.save();
+      print('Username: $_username, Email: $_email, Password: $_password');
     } else{
       print('Form invalid');
     }
