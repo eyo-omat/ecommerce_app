@@ -11,7 +11,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           brightness: Brightness.dark,
           primaryColor: Colors.purple[400],
-          accentColor: Colors.green[300]),
+          accentColor: Colors.green[300],
+          textTheme: TextTheme(
+              headline:
+                  TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold))
+        ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
@@ -85,6 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Text(
               'You have pushed the button this many times:',
+              style: Theme.of(context).textTheme.headline,
             ),
             Text(
               '$_counter',
