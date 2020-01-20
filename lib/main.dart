@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/pages/register_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
               title: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
               body1: TextStyle(fontSize: 18.0))
         ),
-      //home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: RegisterPage()
     );
   }
 }
