@@ -130,6 +130,7 @@ class RegisterPageState extends State<RegisterPage> {
     final responseData = json.decode(response.body);
     setState(() => _isSubmitting = false);
     _showSuccessSnack();
+    _redirectUser();
     print(responseData);
   }
 
@@ -137,6 +138,10 @@ class RegisterPageState extends State<RegisterPage> {
     final snackbar = SnackBar(content: Text('$_username successfully created!!', style: TextStyle(color: Colors.green),),);
     _scaffoldKey.currentState.showSnackBar(snackbar);
     _formKey.currentState.reset();
+  }
+
+  void _redirectUser() {
+    Navigator.pushReplacementNamed(context, '/products');
   }
 
   @override
