@@ -71,7 +71,7 @@ class LoginPageState extends State<LoginPage> {
               onPressed: () => _submit()),
           FlatButton(
             child: Text('New User? Register'),
-            onPressed: () => print('Register'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
           )
         ],
       ),

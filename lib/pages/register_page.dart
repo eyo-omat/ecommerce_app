@@ -91,7 +91,7 @@ class RegisterPageState extends State<RegisterPage> {
                         ),
                         FlatButton(
                           child: Text('Existing User? Login'),
-                          onPressed: () => print('login'),
+                          onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
                         )
                       ],
                     ),
