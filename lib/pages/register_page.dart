@@ -8,6 +8,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
   bool _obscureText = true;
@@ -126,12 +127,20 @@ class RegisterPageState extends State<RegisterPage> {
     });
 
     final responseData = json.decode(response.body);
+    _showSuccessSnack();
     print(responseData);
+  }
+
+  void _showSuccessSnack(){
+    final snackbar = SnackBar(content: Text('$_username successfully created!!', style: TextStyle(color: Colors.green),),);
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+    _formKey.currentState.reset();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Register"),
       ),
