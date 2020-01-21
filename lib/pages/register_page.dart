@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -7,7 +9,7 @@ class RegisterPage extends StatefulWidget {
 
 class RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   bool _obscureText = true;
 
   String _username, _email, _password;
@@ -21,7 +23,7 @@ class RegisterPageState extends State<RegisterPage> {
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
         onSaved: (val) => _username = val,
-        validator: (val) => val.length < 6 ? 'Username is too short':null,
+        validator: (val) => val.length < 6 ? 'Username is too short' : null,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: 'Username',
@@ -38,7 +40,7 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
-        validator: (val) => !val.contains('@') ? 'Invalid Email':null,
+        validator: (val) => !val.contains('@') ? 'Invalid Email' : null,
         onSaved: (val) => _email = val,
         decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -56,17 +58,17 @@ class RegisterPageState extends State<RegisterPage> {
     return Padding(
       padding: EdgeInsets.only(top: 20.0),
       child: TextFormField(
-        validator: (val) => val.length < 6 ? 'Password is too short':null,
+        validator: (val) => val.length < 6 ? 'Password is too short' : null,
         onSaved: (val) => _password = val,
         obscureText: _obscureText,
         decoration: InputDecoration(
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() => _obscureText = !_obscureText);
-            },
-            child: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off),
-          ),
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() => _obscureText = !_obscureText);
+              },
+              child:
+                  Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+            ),
             border: OutlineInputBorder(),
             labelText: 'Password',
             hintText: 'Enter password, min length 6',
@@ -80,42 +82,51 @@ class RegisterPageState extends State<RegisterPage> {
 
   Widget _showFormActions() {
     return Padding(
-                    padding: EdgeInsets.only(top: 20.0),
-                    child: Column(
-                      children: <Widget>[
-                        RaisedButton(
-                          child: Text(
-                            'Submit',
-                            style: Theme.of(context)
-                                .textTheme
-                                .body1
-                                .copyWith(color: Colors.black),
-                          ),
-                          elevation: 8.0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0))),
-                          color: Theme.of(context).primaryColor,
-                          onPressed: () => _submit()
-                        ),
-                        FlatButton(
-                          child: Text('Existing User? Login'),
-                          onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
-                        )
-                      ],
-                    ),
-                  );
+      padding: EdgeInsets.only(top: 20.0),
+      child: Column(
+        children: <Widget>[
+          RaisedButton(
+              child: Text(
+                'Submit',
+                style: Theme.of(context)
+                    .textTheme
+                    .body1
+                    .copyWith(color: Colors.black),
+              ),
+              elevation: 8.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              color: Theme.of(context).primaryColor,
+              onPressed: () => _submit()),
+          FlatButton(
+            child: Text('Existing User? Login'),
+            onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+          )
+        ],
+      ),
+    );
   }
 
   void _submit() {
     final form = _formKey.currentState;
-    
-    if (form.validate()){
+
+    if (form.validate()) {
       form.save();
-      print('Username: $_username, Email: $_email, Password: $_password');
-    } else{
-      print('Form invalid');
+
+      _registerUser();
     }
+  }
+
+  void _registerUser() async {
+    http.Response response =
+        await http.post('http://localhost:1337/auth/local/register', body: {
+      "username": _username,
+      "password": _password,
+      "email": _email,
+    });
+
+    final responseData = json.decode(response.body);
+    print(responseData);
   }
 
   @override
