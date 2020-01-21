@@ -11,7 +11,7 @@ class RegisterPageState extends State<RegisterPage> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
 
-  bool _obscureText = true;
+  bool _isSubmitting, _obscureText = true;
 
   String _username, _email, _password;
 
@@ -86,7 +86,7 @@ class RegisterPageState extends State<RegisterPage> {
       padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
-          RaisedButton(
+          _isSubmitting == true ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).primaryColor),) : RaisedButton(
               child: Text(
                 'Submit',
                 style: Theme.of(context)
@@ -119,6 +119,7 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _registerUser() async {
+    setState(() => _isSubmitting = true);
     http.Response response =
         await http.post('http://localhost:1337/auth/local/register', body: {
       "username": _username,
@@ -127,6 +128,7 @@ class RegisterPageState extends State<RegisterPage> {
     });
 
     final responseData = json.decode(response.body);
+    setState(() => _isSubmitting = false);
     _showSuccessSnack();
     print(responseData);
   }
