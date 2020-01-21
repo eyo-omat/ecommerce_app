@@ -141,7 +141,9 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   void _redirectUser() {
-    Navigator.pushReplacementNamed(context, '/products');
+    Future.delayed(Duration(seconds: 2), () {
+       Navigator.pushReplacementNamed(context, '/products');
+    });
   }
 
   @override
