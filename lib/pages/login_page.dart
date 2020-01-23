@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -46,13 +47,13 @@ class LoginPageState extends State<LoginPage> {
         onSaved: (val) => _password = val,
         obscureText: _obscureText,
         decoration: InputDecoration(
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() => _obscureText = !_obscureText);
-            },
-            child: Icon(
-              _obscureText ? Icons.visibility : Icons.visibility_off),
-          ),
+            suffixIcon: GestureDetector(
+              onTap: () {
+                setState(() => _obscureText = !_obscureText);
+              },
+              child:
+                  Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+            ),
             border: OutlineInputBorder(),
             labelText: 'Password',
             hintText: 'Enter password, min length 6',
@@ -69,22 +70,28 @@ class LoginPageState extends State<LoginPage> {
       padding: EdgeInsets.only(top: 20.0),
       child: Column(
         children: <Widget>[
-          _isSubmitting == true ? CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Theme.of(context).accentColor),) : RaisedButton(
-              child: Text(
-                'Submit',
-                style: Theme.of(context)
-                    .textTheme
-                    .body1
-                    .copyWith(color: Colors.black),
-              ),
-              elevation: 8.0,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              color: Theme.of(context).accentColor,
-              onPressed: () => _submit()),
+          _isSubmitting == true
+              ? CircularProgressIndicator(
+                  valueColor:
+                      AlwaysStoppedAnimation(Theme.of(context).accentColor),
+                )
+              : RaisedButton(
+                  child: Text(
+                    'Submit',
+                    style: Theme.of(context)
+                        .textTheme
+                        .body1
+                        .copyWith(color: Colors.black),
+                  ),
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                  color: Theme.of(context).accentColor,
+                  onPressed: () => _submit()),
           FlatButton(
             child: Text('New User? Register'),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/register'),
+            onPressed: () =>
+                Navigator.pushReplacementNamed(context, '/register'),
           )
         ],
       ),
@@ -112,6 +119,7 @@ class LoginPageState extends State<LoginPage> {
     final responseData = json.decode(response.body);
     if (response.statusCode == 200) {
       setState(() => _isSubmitting = false);
+      _storeUserData(responseData);
       _showSuccessSnack();
       _redirectUser();
       print(responseData);
@@ -122,14 +130,31 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _showSuccessSnack(){
-    final snackbar = SnackBar(content: Text('$_email successfully logged in!!', style: TextStyle(color: Colors.green),),);
+  void _storeUserData(responseData) async {
+    final prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> user = responseData['user'];
+    user.putIfAbsent('jwt', () => responseData['jwt']);
+    prefs.setString('user', json.encode(user));
+  }
+
+  void _showSuccessSnack() {
+    final snackbar = SnackBar(
+      content: Text(
+        '$_email successfully logged in!!',
+        style: TextStyle(color: Colors.green),
+      ),
+    );
     _scaffoldKey.currentState.showSnackBar(snackbar);
     _formKey.currentState.reset();
   }
 
-  void _showErrorSnack(String errorMsg){
-    final snackbar = SnackBar(content: Text(errorMsg, style: TextStyle(color: Colors.red),),);
+  void _showErrorSnack(String errorMsg) {
+    final snackbar = SnackBar(
+      content: Text(
+        errorMsg,
+        style: TextStyle(color: Colors.red),
+      ),
+    );
     _scaffoldKey.currentState.showSnackBar(snackbar);
 
     throw Exception('Error logging in: $errorMsg');
@@ -137,7 +162,7 @@ class LoginPageState extends State<LoginPage> {
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
-       Navigator.pushReplacementNamed(context, '/products');
+      Navigator.pushReplacementNamed(context, '/products');
     });
   }
 
