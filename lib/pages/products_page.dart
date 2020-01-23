@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_ecommerce/models/app_state.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -22,15 +24,20 @@ class ProductsPageState extends State<ProductsPage> {
     // _getUser();
   }
 
-  void _getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    var storedUser = prefs.getString('user');
-    print(json.decode(storedUser));
+  // void _getUser() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   var storedUser = prefs.getString('user');
+  //   print(json.decode(storedUser));
 
-  }
+  // }
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Text('Products Page');
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, state) {
+        return Text(json.encode(state.user));
+      },
+    );
   }
 }

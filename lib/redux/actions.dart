@@ -15,7 +15,9 @@ ThunkAction<AppState> getUserAction = (Store<AppState> store) async {
 };
 
 class GetUserAction {
-  final dynamic user;
+  final dynamic _user;
 
-  GetUserAction(this.user);
+  dynamic get user => this._user;
+
+  GetUserAction(this._user);
 }
