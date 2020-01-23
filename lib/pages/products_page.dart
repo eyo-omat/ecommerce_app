@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProductsPage extends StatefulWidget {
+  final void Function() onInit;
+
+  ProductsPage({ this.onInit });
+
   @override
   ProductsPageState createState() => ProductsPageState();
 }
@@ -12,9 +16,10 @@ class ProductsPageState extends State<ProductsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
+   
     super.initState();
-    _getUser();
+    widget.onInit();
+    // _getUser();
   }
 
   void _getUser() async {
