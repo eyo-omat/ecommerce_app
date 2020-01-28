@@ -4,6 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/models/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
+final _gradientBackground = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.bottomLeft,
+    end: Alignment.topRight,
+    stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+    colors: [
+      Colors.green[300],
+      Colors.green[400],
+      Colors.green[500],
+      Colors.green[600],
+      Colors.green[700]
+    ]
+  )
+);
 class ProductsPage extends StatefulWidget {
   final void Function() onInit;
 
@@ -56,7 +70,10 @@ class ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: _appBar,
       body: Container(
-        child: Text('Products Page'),
+        decoration: _gradientBackground,
+        child: Column(children: [ 
+          Row(children: [Text('Products Page')],)
+          ])
       ),
       );
   }
