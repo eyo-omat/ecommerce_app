@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_ecommerce/models/app_state.dart';
+import 'package:flutter_ecommerce/models/user.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,14 +11,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 ThunkAction<AppState> getUserAction = (Store<AppState> store) async {
   final prefs = await SharedPreferences.getInstance();
   final String storedUserData = prefs.getString('user');
-  final user = storedUserData != null ? json.decode(storedUserData) : null;
+  final user = storedUserData != null ? User.fromJson(json.decode(storedUserData)) : null;
   store.dispatch(GetUserAction(user));
 };
 
 class GetUserAction {
-  final dynamic _user;
+  final User _user;
 
-  dynamic get user => this._user;
+  User get user => this._user;
 
   GetUserAction(this._user);
 }
