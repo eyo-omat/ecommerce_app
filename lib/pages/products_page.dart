@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/models/app_state.dart';
+import 'package:flutter_ecommerce/widgets/product_item.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 final _gradientBackground = BoxDecoration(
@@ -66,7 +67,7 @@ class ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Scaffold(
       appBar: _appBar,
       body: Container(
@@ -83,7 +84,7 @@ class ProductsPageState extends State<ProductsPage> {
                     child: GridView.builder(
                       itemCount: state.products.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                      itemBuilder: (context, i) => Text(state.products[i]['name']),
+                      itemBuilder: (context, i) => ProductItem(item: state.products[i]),
                     ),
                   ),
                 )
