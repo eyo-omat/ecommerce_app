@@ -67,7 +67,7 @@ class ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+
     return Scaffold(
       appBar: _appBar,
       body: Container(
