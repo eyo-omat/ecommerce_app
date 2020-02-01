@@ -12,11 +12,11 @@ final gradientBackground = BoxDecoration(
     end: Alignment.topRight,
     stops: [0.1, 0.3, 0.5, 0.7, 0.9],
     colors: [
-      Colors.green[300],
-      Colors.green[400],
-      Colors.green[500],
-      Colors.green[600],
-      Colors.green[700]
+      Colors.yellow[300],
+      Colors.yellow[400],
+      Colors.yellow[500],
+      Colors.yellow[600],
+      Colors.yellow[700]
     ]
   )
 );
@@ -56,7 +56,7 @@ class ProductsPageState extends State<ProductsPage> {
           title: SizedBox(child: state.user != null ? Text(state.user.username) : 
           FlatButton(child: Text('Register Here', style: Theme.of(context).textTheme.body1,),
           onPressed: () => Navigator.pushNamed(context, '/register'),),),
-          leading: state.user != null ? Icon(Icons.store) : Text(''),
+          leading: state.user != null ? IconButton(icon: Icon(Icons.store), onPressed: () =>  Navigator.pushNamed(context, '/cart'),) : Text(''),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 12.0),

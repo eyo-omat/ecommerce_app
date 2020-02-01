@@ -141,7 +141,7 @@ class LoginPageState extends State<LoginPage> {
     final snackbar = SnackBar(
       content: Text(
         '$_email successfully logged in!!',
-        style: TextStyle(color: Colors.green),
+        style: TextStyle(color: Colors.yellow),
       ),
     );
     _scaffoldKey.currentState.showSnackBar(snackbar);
