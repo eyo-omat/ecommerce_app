@@ -6,9 +6,10 @@ import 'package:flutter_ecommerce/redux/actions.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class ProductDetailPage extends StatelessWidget {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final Product item;
 
-  const ProductDetailPage({Key key, this.item}) : super(key: key);
+  ProductDetailPage({Key key, this.item}) : super(key: key);
 
   bool _isInCart(AppState state, String id){
     List<Product> cartProducts = state.cartProducts;
@@ -20,6 +21,7 @@ class ProductDetailPage extends StatelessWidget {
     final Orientation orientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text(item.name),
       ),
@@ -49,6 +51,11 @@ class ProductDetailPage extends StatelessWidget {
                         color: _isInCart(state, item.id) ? Colors.cyan[700] : Colors.white, 
                         onPressed: () {
                           StoreProvider.of<AppState>(context).dispatch(toggleCartProductAction(item));
+                          final snackBar = SnackBar(
+                            duration: Duration(seconds: 2),
+                            content: Text('Cart Updated', style: TextStyle(color: Colors.green)),
+                          );
+                          _scaffoldKey.currentState.showSnackBar(snackBar);
                         },
                       ) :
                       Text('');
