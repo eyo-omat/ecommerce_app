@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/models/app_state.dart';
 import 'package:flutter_ecommerce/models/product.dart';
+import 'package:flutter_ecommerce/pages/product_detail_page.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class ProductItem extends StatelessWidget {
@@ -12,7 +13,17 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String pictureUrl = "http://localhost:1337${item.picture['url']}";
-    return GridTile(
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context){
+            return ProductDetailPage(
+              item: item,
+            );
+          }
+        )
+      ),
+      child: GridTile(
       footer: GridTileBar(
         title: FittedBox(
           fit: BoxFit.scaleDown,
@@ -30,7 +41,8 @@ class ProductItem extends StatelessWidget {
           },
         ),
       ),
-      child: Image.network(pictureUrl, fit: BoxFit.cover,),
+      child: Hero(tag: item, child: Image.network(pictureUrl, fit: BoxFit.cover,)),
+    )
     );
   }
 
