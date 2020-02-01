@@ -22,11 +22,11 @@ class ProductDetailPage extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: EdgeInsets.only(bottom: 10.0),
-              child: Image.network(
+              child: Hero(tag: item, child: Image.network(
                 pictureUrl, 
                 width: orientation == Orientation.portrait ? 600 : 250, 
                 height: orientation == Orientation.portrait ? 400 : 200,
-                fit: BoxFit.cover,),
+                fit: BoxFit.cover,)),
             ),
             Text(item.name, style: Theme.of(context).textTheme.title),
             Text('\$${item.price}', style: Theme.of(context).textTheme.body1),
