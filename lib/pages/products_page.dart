@@ -56,7 +56,7 @@ class ProductsPageState extends State<ProductsPage> {
           title: SizedBox(child: state.user != null ? Text(state.user.username) : 
           FlatButton(child: Text('Register Here', style: Theme.of(context).textTheme.body1,),
           onPressed: () => Navigator.pushNamed(context, '/register'),),),
-          leading: state.user != null ? Icon(Icons.store) : Text(''),
+          leading: state.user != null ? IconButton(icon: Icon(Icons.store), onPressed: () =>  Navigator.pushNamed(context, '/cart'),) : Text(''),
           actions: <Widget>[
             Padding(
               padding: EdgeInsets.only(right: 12.0),
