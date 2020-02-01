@@ -30,6 +30,8 @@ class CartPageState extends State<CartPage> {
         appBar: AppBar(
           title: Text('Cart Page'),
           bottom: TabBar(
+            labelColor: Colors.yellow[600],
+            unselectedLabelColor: Colors.yellow[900],
             tabs: <Widget>[
               Tab(icon: Icon(Icons.shopping_cart)),
               Tab(icon: Icon(Icons.credit_card)),

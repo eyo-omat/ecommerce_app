@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
                 brightness: Brightness.dark,
                 primaryColor: Colors.purple[400],
-                accentColor: Colors.green[300],
+                accentColor: Colors.yellow[300],
                 textTheme: TextTheme(
                     headline:
                         TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
