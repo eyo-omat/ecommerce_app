@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
               ),
               '/login': (BuildContext context) => LoginPage(),
               '/register': (BuildContext context) => RegisterPage(),
+              '/cart': (BuildContext context) => CartPage(),
             },
             theme: ThemeData(
                 brightness: Brightness.dark,
