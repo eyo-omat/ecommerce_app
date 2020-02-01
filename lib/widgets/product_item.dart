@@ -12,7 +12,17 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String pictureUrl = "http://localhost:1337${item.picture['url']}";
-    return GridTile(
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context){
+            return ProductDetailPage(
+              item: item,
+            );
+          }
+        )
+      ),
+      child: GridTile(
       footer: GridTileBar(
         title: FittedBox(
           fit: BoxFit.scaleDown,
@@ -31,6 +41,7 @@ class ProductItem extends StatelessWidget {
         ),
       ),
       child: Image.network(pictureUrl, fit: BoxFit.cover,),
+    )
     );
   }
 
