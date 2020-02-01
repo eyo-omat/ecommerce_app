@@ -5,7 +5,7 @@ import 'package:flutter_ecommerce/models/app_state.dart';
 import 'package:flutter_ecommerce/widgets/product_item.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-final _gradientBackground = BoxDecoration(
+final gradientBackground = BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.bottomLeft,
     end: Alignment.topRight,
@@ -71,7 +71,7 @@ class ProductsPageState extends State<ProductsPage> {
     return Scaffold(
       appBar: _appBar,
       body: Container(
-        decoration: _gradientBackground,
+        decoration: gradientBackground,
         child: StoreConnector<AppState, AppState>(
           converter: (store) => store.state,
           builder: (_, state) {
