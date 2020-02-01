@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'E-mall',
             routes: {
-              '/products': (BuildContext context) => ProductsPage(
+              '/': (BuildContext context) => ProductsPage(
                 onInit: () {
                   StoreProvider.of<AppState>(context).dispatch(getUserAction);
                   StoreProvider.of<AppState>(context).dispatch(getProductsAction);
@@ -48,6 +48,6 @@ class MyApp extends StatelessWidget {
                     title:
                         TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
                     body1: TextStyle(fontSize: 18.0))),
-            home: RegisterPage()));
+        ));
   }
 }
