@@ -11,6 +11,11 @@ class ProductItem extends StatelessWidget {
 
   ProductItem({this.item});
 
+  bool _isInCart(AppState state, String id){
+    List<Product> cartProducts = state.cartProducts;
+    return cartProducts.indexWhere((product) => product.id == id) > -1;
+  }
+
   @override
   Widget build(BuildContext context) {
     final String pictureUrl = "http://localhost:1337${item.picture['url']}";
@@ -39,7 +44,7 @@ class ProductItem extends StatelessWidget {
             return state.user != null ? 
               IconButton(
                 icon: Icon(Icons.shopping_cart), 
-                color: Colors.white, 
+                color: _isInCart(state, item.id) ? Colors.cyan[700] : Colors.white, 
                 onPressed: () {
                   StoreProvider.of<AppState>(context).dispatch(toggleCartProductAction(item));
                 },
