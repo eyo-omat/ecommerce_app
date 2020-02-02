@@ -3,12 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/models/app_state.dart';
 import 'package:flutter_ecommerce/models/product.dart';
 import 'package:flutter_ecommerce/pages/product_detail_page.dart';
+import 'package:flutter_ecommerce/redux/actions.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class ProductItem extends StatelessWidget {
   final Product item;
 
   ProductItem({this.item});
+
+  bool _isInCart(AppState state, String id){
+    List<Product> cartProducts = state.cartProducts;
+    return cartProducts.indexWhere((product) => product.id == id) > -1;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +42,13 @@ class ProductItem extends StatelessWidget {
           converter: (store) => store.state,
           builder: (_, state){
             return state.user != null ? 
-              IconButton(icon: Icon(Icons.shopping_cart), color: Colors.white, onPressed: () => print('pressed'),) :
+              IconButton(
+                icon: Icon(Icons.shopping_cart), 
+                color: _isInCart(state, item.id) ? Colors.cyan[700] : Colors.white, 
+                onPressed: () {
+                  StoreProvider.of<AppState>(context).dispatch(toggleCartProductAction(item));
+                },
+              ) :
               Text('');
           },
         ),
