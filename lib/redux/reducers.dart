@@ -7,7 +7,8 @@ AppState appReducer(AppState state, dynamic action) {
   return AppState(
     user: userReducer(state.user, action),
     products: productsReducer(state.products, action),
-    cartProducts: cartProductsReducer(state.cartProducts, action)
+    cartProducts: cartProductsReducer(state.cartProducts, action),
+    cards: cardsReducer(state.cards, action)
   );
 }
 
@@ -37,4 +38,12 @@ List<Product> cartProductsReducer(List<Product> cartProducts, dynamic action) {
   }
 
   return cartProducts;
+}
+
+List<dynamic> cardsReducer(List<dynamic> cards, dynamic action) {
+  if (action is GetCardsAction){
+    return action.cards;
+  }
+
+  return cards;
 }
