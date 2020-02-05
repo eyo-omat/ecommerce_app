@@ -122,3 +122,20 @@ class GetCartProductAction {
 
   GetCartProductAction(this._cartProducts);
 }
+
+
+/* Cards actions */
+ThunkAction<AppState> getCardsAction = (Store<AppState> store) async {
+  final String customerId = store.state.user.customerId;
+  http.Response response = await http.get('http://localhost:1337/card?$customerId');
+  final responseData = json.decode(response.body);
+  store.dispatch(GetCardsAction(responseData));
+};
+
+class GetCardsAction {
+  final List<dynamic> _cards;
+
+  List<dynamic> get cards => this._cards;
+
+  GetCardsAction(this._cards);
+}
