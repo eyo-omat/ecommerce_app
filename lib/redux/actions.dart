@@ -139,3 +139,19 @@ class GetCardsAction {
 
   GetCardsAction(this._cards);
 }
+
+class AddCardAction {
+  final dynamic _card;
+
+  dynamic get card => this._card;
+
+  AddCardAction(this._card);
+}
+
+class UpdateCardTokenAction {
+  final String _cardToken;
+
+  String get cardToken => this._cardToken;
+
+  UpdateCardTokenAction(this._cardToken);
+}
