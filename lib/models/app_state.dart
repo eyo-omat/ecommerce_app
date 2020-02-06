@@ -8,14 +8,16 @@ class AppState {
   final List<Product> products;
   final List<Product> cartProducts;
   final List<dynamic> cards;
+  final String cardToken;
 
-  AppState({@required this.user, @required this.products, @required this.cartProducts, @required this.cards});
+  AppState({@required this.user, @required this.products, @required this.cartProducts, @required this.cards, @required this.cardToken});
 
   factory AppState.initial() {
     return AppState(
       user: null,
       products: [],
-      cartProducts: []
+      cartProducts: [],
+      cardToken: ""
     );
   }
 }
