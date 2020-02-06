@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_ecommerce/models/app_state.dart';
 import 'package:flutter_ecommerce/widgets/product_item.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:stripe_payment/stripe_payment.dart';
 
 class CartPage extends StatefulWidget {
   final void Function() onInit;
@@ -52,6 +53,12 @@ class CartPageState extends State<CartPage> {
           builder: (_, state) {
             return Column(
               children: <Widget>[
+                Padding(padding: EdgeInsets.only(top: 10.0)),
+                RaisedButton(
+                  elevation: 8.0,
+                  child: Text('Add card'),
+                  onPressed: () => print('pressed')
+                ),
                 Expanded(
                   child: ListView(
                     children: state.cards.map<Widget>((card) => (ListTile(
