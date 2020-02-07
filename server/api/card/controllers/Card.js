@@ -16,8 +16,8 @@ module.exports = {
   },
 
   add: async ctx => {
-    const {customerId, source} = ctx.request.body;
-    const cardData = await stripe.customers.createSource(customerId, {source});
+    const {customer, source} = ctx.request.body;
+    const cardData = await stripe.paymentMethods.attach(source, {customer});
     ctx.send(cardData);
   }
 };
