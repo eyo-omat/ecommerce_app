@@ -106,7 +106,15 @@ class CartPageState extends State<CartPage> {
                       ),
                       title: Text("${c['card']['exp_month']}/${c['card']['exp_year']}, ${c['card']['last4']}"),
                       subtitle: Text(c['card']['brand']),
-                      trailing: FlatButton(
+                      trailing: state.cardToken == c['id'] ?
+                      Chip(
+                        avatar: CircleAvatar(
+                          backgroundColor: Colors.green,
+                          child: Icon(Icons.check_circle, color: Colors.white),
+                        ),
+                        label: Text('Primary Card'),
+                      ) 
+                      : FlatButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10.0))
                         ),
