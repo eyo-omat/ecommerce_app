@@ -17,6 +17,7 @@ class AppState {
       user: null,
       products: [],
       cartProducts: [],
+      cards: [],
       cardToken: ""
     );
   }
