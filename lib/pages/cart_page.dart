@@ -23,7 +23,7 @@ class CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     widget.onInit();
-    StripeSource.setPublishableKey("sk_test_wxFE2IlwkcY8L4WSGITVGAc4");
+    StripePayment.setOptions(StripeOptions(publishableKey: "pk_test_CtEaZv56WAdxEZ2EgabKlF5N"));
   }
   Widget _cartTab(){
     final Orientation orientation = MediaQuery.of(context).orientation;
@@ -83,7 +83,8 @@ class CartPageState extends State<CartPage> {
                   elevation: 8.0,
                   child: Text('Add card'),
                   onPressed: () async {
-                    final String cardToken = await StripeSource.addSource();
+                    final PaymentMethod cardPaymentMethod = await StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest());
+                    final String cardToken = cardPaymentMethod.id;
                     final card = await _addCard(cardToken);
                     // Action to Add card
                     StoreProvider.of<AppState>(context).dispatch(AddCardAction(card));
