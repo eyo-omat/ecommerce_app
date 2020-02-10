@@ -9,8 +9,8 @@ module.exports = {
   
   index: async ctx => {
     const customerId = ctx.request.querystring;
-    const customerData = await stripe.customers.retrieve(customerId);
-    const cardData = customerData.sources.data;
+    const paymentMethodsData = await stripe.paymentMethods.list({'customer': customerId, 'type':'card'});
+    const cardData = paymentMethodsData.data;
     ctx.send(cardData);
     // ctx.send('He;;o world');
   },
