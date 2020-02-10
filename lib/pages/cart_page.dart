@@ -149,6 +149,19 @@ class CartPageState extends State<CartPage> {
     return Text('orders');
   }
 
+  /**
+   * Utility function to calculate total price
+   * of products in the cart
+   * @return String price to 2 decimal places
+   */
+  String calculateTotalPrice(cartProducts) {
+    double totalPrice = 0.0;
+    cartProducts.forEach((cartProduct){
+      totalPrice += cartProduct.price;
+    });
+    return totalPrice.toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
