@@ -71,10 +71,11 @@ class CartPageState extends State<CartPage> {
                 "source": cardToken,
                 "customer": user.customerId
               });
-
-              final responseData = json.decode(response.body);
+              var responseData = {};
+              if (response.statusCode == 200){
+                responseData = json.decode(response.body);
+              } 
               return responseData;
-
             }
             return Column(
               children: <Widget>[
@@ -86,15 +87,23 @@ class CartPageState extends State<CartPage> {
                     final PaymentMethod cardPaymentMethod = await StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest());
                     final String cardToken = cardPaymentMethod.id;
                     final card = await _addCard(cardToken);
-                    // Action to Add card
-                    StoreProvider.of<AppState>(context).dispatch(AddCardAction(card));
-                    // Action to updated card token
-                    StoreProvider.of<AppState>(context).dispatch(UpdateCardTokenAction(card['id']));
-                    // show snackbar
-                    final snackbar = SnackBar(
-                      content: Text('Card Added!', style: TextStyle(color: Colors.green))
-                    );
-                    _scaffoldKey.currentState.showSnackBar(snackbar);
+                    if (card.isNotEmpty){
+                      // Action to Add card
+                      StoreProvider.of<AppState>(context).dispatch(AddCardAction(card));
+                      // Action to updated card token
+                      StoreProvider.of<AppState>(context).dispatch(UpdateCardTokenAction(card['id']));
+                      // show snackbar
+                      final snackbar = SnackBar(
+                        content: Text('Card Added!', style: TextStyle(color: Colors.green))
+                      );
+                      _scaffoldKey.currentState.showSnackBar(snackbar);
+                    } else {
+                      // show snackbar
+                      final snackbar = SnackBar(
+                        content: Text('Card Added!', style: TextStyle(color: Colors.red))
+                      );
+                      _scaffoldKey.currentState.showSnackBar(snackbar);
+                    }
                   }
                 ),
                 Expanded(
