@@ -128,7 +128,9 @@ class CartPageState extends State<CartPage> {
                           borderRadius: BorderRadius.all(Radius.circular(10.0))
                         ),
                         child: Text('Set as Primary', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink),),
-                        onPressed: () => print('pressed'),
+                        onPressed: (){
+                          StoreProvider.of<AppState>(context).dispatch(UpdateCardTokenAction(c['id']));
+                        },
                       ),
                     )
                     )
