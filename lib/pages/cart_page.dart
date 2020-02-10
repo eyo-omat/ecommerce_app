@@ -157,14 +157,14 @@ class CartPageState extends State<CartPage> {
           return DefaultTabController(
             length: 3,
             initialIndex: 0,
-            floatingActionButton: state.cartProducts.length > 0
+            child: Scaffold(
+              key: _scaffoldKey,
+              floatingActionButton: state.cartProducts.length > 0
                 ? FloatingActionButton(
                     child: Icon(Icons.local_atm, size: 30.0),
                     onPressed: () => print('pressed'),
                   )
                 : Text(''),
-            child: Scaffold(
-              key: _scaffoldKey,
               appBar: AppBar(
                 title: Text('Cart Page'),
                 bottom: TabBar(
