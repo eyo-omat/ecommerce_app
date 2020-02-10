@@ -26,12 +26,9 @@ class CartPageState extends State<CartPage> {
         StripeOptions(publishableKey: "pk_test_CtEaZv56WAdxEZ2EgabKlF5N"));
   }
 
-  Widget _cartTab() {
+  Widget _cartTab(state) {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (_, state) {
-        return Column(
+    return Column(
           children: <Widget>[
             Expanded(
               child: SafeArea(
@@ -53,14 +50,9 @@ class CartPageState extends State<CartPage> {
             )
           ],
         );
-      },
-    );
   }
 
-  Widget _cardsTab() {
-    return StoreConnector<AppState, AppState>(
-      converter: (store) => store.state,
-      builder: (_, state) {
+  Widget _cardsTab(state) {
         _addCard(cardToken) async {
           final User user = state.user;
           // update a user's data to include cardToken (PUT /users/:id)
@@ -151,11 +143,9 @@ class CartPageState extends State<CartPage> {
                         .toList()))
           ],
         );
-      },
-    );
   }
 
-  Widget _receiptTab() {
+  Widget _receiptTab(state) {
     return Text('orders');
   }
 
@@ -188,7 +178,7 @@ class CartPageState extends State<CartPage> {
                 ),
               ),
               body: TabBarView(
-                children: <Widget>[_cartTab(), _cardsTab(), _receiptTab()],
+                children: <Widget>[_cartTab(state), _cardsTab(state), _receiptTab(state)],
               ),
             ),
           );
