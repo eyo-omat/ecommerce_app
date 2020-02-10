@@ -179,7 +179,7 @@ class CartPageState extends State<CartPage> {
                   )
                 : Text(''),
               appBar: AppBar(
-                title: Text('Cart Page'),
+                title: Text('Summary: ${state.cartProducts.length} Items . \$${calculateTotalPrice(state.cartProducts)}'),
                 bottom: TabBar(
                   labelColor: Colors.yellow[600],
                   unselectedLabelColor: Colors.yellow[900],
