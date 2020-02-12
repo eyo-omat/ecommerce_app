@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_ecommerce/models/order.dart';
 import 'package:flutter_ecommerce/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_ecommerce/models/app_state.dart';
@@ -107,6 +108,18 @@ ThunkAction<AppState> getCartProductsAction = (Store<AppState> store) async {
 
 };
 
+ThunkAction<AppState> clearCartProductsAction = (Store<AppState> store) async {
+  final User user = store.state.user;
+
+  await http.put('http://localhost:1337/carts/${user.cartId}', body: {
+    "products": json.encode([])
+  }, headers: {
+    'Authorization': 'Bearer ${user.jwt}'
+  });
+  store.dispatch(ClearCartProductAction(List(0)));
+
+};
+
 class ToggleCartProductAction {
   final List<Product> _cartProducts;
 
@@ -121,6 +134,14 @@ class GetCartProductAction {
   List<Product> get cartProducts => this._cartProducts;
 
   GetCartProductAction(this._cartProducts);
+}
+
+class ClearCartProductAction {
+  final List<Product> _cartProducts;
+
+  List<Product> get cartProducts => this._cartProducts;
+
+  ClearCartProductAction(this._cartProducts);
 }
 
 
@@ -173,4 +194,13 @@ class UpdateCardTokenAction {
   String get cardToken => this._cardToken;
 
   UpdateCardTokenAction(this._cardToken);
+}
+
+/* Order actions */
+class AddOrderAction {
+  final Order _order;
+
+  Order get order => this._order;
+
+  AddOrderAction(this._order);
 }
