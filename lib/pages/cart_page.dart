@@ -11,11 +11,10 @@ import 'package:http/http.dart' as http;
 
 class CartPage extends StatefulWidget {
   final void Function() onInit;
-  CartPage({ this.onInit });
+  CartPage({this.onInit});
 
   @override
   CartPageState createState() => CartPageState();
-
 }
 
 class CartPageState extends State<CartPage> {
@@ -23,159 +22,236 @@ class CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     widget.onInit();
-    StripePayment.setOptions(StripeOptions(publishableKey: "pk_test_CtEaZv56WAdxEZ2EgabKlF5N"));
+    StripePayment.setOptions(
+        StripeOptions(publishableKey: "pk_test_CtEaZv56WAdxEZ2EgabKlF5N"));
   }
-  Widget _cartTab(){
+
+  Widget _cartTab(state) {
     final Orientation orientation = MediaQuery.of(context).orientation;
-    return StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (_, state) {
-            return Column(
-              children: <Widget>[
-                Expanded(
-                  child: SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: GridView.builder(
-                      itemCount: state.cartProducts.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: orientation == Orientation.portrait? 2:3, 
-                        mainAxisSpacing: 4.0, 
-                        crossAxisSpacing: 4.0,
-                        childAspectRatio: orientation == Orientation.portrait ? 1.0 : 1.3,
-                      ),
-                      itemBuilder: (context, i) => ProductItem(item: state.cartProducts[i]),
-                    ),
+    return Column(
+          children: <Widget>[
+            Expanded(
+              child: SafeArea(
+                top: false,
+                bottom: false,
+                child: GridView.builder(
+                  itemCount: state.cartProducts.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+                    mainAxisSpacing: 4.0,
+                    crossAxisSpacing: 4.0,
+                    childAspectRatio:
+                        orientation == Orientation.portrait ? 1.0 : 1.3,
                   ),
-                )
-              ],
-            );
-          },
-          );
-  }
-
-  Widget _cardsTab(){
-    return StoreConnector<AppState, AppState>(
-          converter: (store) => store.state,
-          builder: (_, state) {
-            _addCard(cardToken) async {
-              final User user = state.user;
-              // update a user's data to include cardToken (PUT /users/:id)
-              await http.put('http://localhost:1337/users/${user.id}', body: {
-                "card_token": cardToken
-              }, headers: {
-                'Authorization': 'Bearer ${user.jwt}'
-              });
-              // associate cardToken (added card) with stripe customer (POST /card/add)
-              http.Response response = await http.post('http://localhost:1337/card/add', body: {
-                "source": cardToken,
-                "customer": user.customerId
-              });
-              var responseData = {};
-              if (response.statusCode == 200){
-                responseData = json.decode(response.body);
-              } 
-              return responseData;
-            }
-            return Column(
-              children: <Widget>[
-                Padding(padding: EdgeInsets.only(top: 10.0)),
-                RaisedButton(
-                  elevation: 8.0,
-                  child: Text('Add card'),
-                  onPressed: () async {
-                    final PaymentMethod cardPaymentMethod = await StripePayment.paymentRequestWithCardForm(CardFormPaymentRequest());
-                    final String cardToken = cardPaymentMethod.id;
-                    final card = await _addCard(cardToken);
-                    if (card.isNotEmpty){
-                      // Action to Add card
-                      StoreProvider.of<AppState>(context).dispatch(AddCardAction(card));
-                      // Action to updated card token
-                      StoreProvider.of<AppState>(context).dispatch(UpdateCardTokenAction(card['id']));
-                      // show snackbar
-                      final snackbar = SnackBar(
-                        content: Text('Card Added!', style: TextStyle(color: Colors.green))
-                      );
-                      _scaffoldKey.currentState.showSnackBar(snackbar);
-                    } else {
-                      // show snackbar
-                      final snackbar = SnackBar(
-                        content: Text('Card Added!', style: TextStyle(color: Colors.red))
-                      );
-                      _scaffoldKey.currentState.showSnackBar(snackbar);
-                    }
-                  }
+                  itemBuilder: (context, i) =>
+                      ProductItem(item: state.cartProducts[i]),
                 ),
-                Expanded(
-                  child: ListView(
-                    children: state.cards.map<Widget>((c) => (ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: Colors.deepOrange,
-                        child: Icon(Icons.credit_card, color: Colors.white),
-                      ),
-                      title: Text("${c['card']['exp_month']}/${c['card']['exp_year']}, ${c['card']['last4']}"),
-                      subtitle: Text(c['card']['brand']),
-                      trailing: state.cardToken == c['id'] ?
-                      Chip(
-                        avatar: CircleAvatar(
-                          backgroundColor: Colors.green,
-                          child: Icon(Icons.check_circle, color: Colors.white),
-                        ),
-                        label: Text('Primary Card'),
-                      ) 
-                      : FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0))
-                        ),
-                        child: Text('Set as Primary', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.pink),),
-                        onPressed: (){
-                          StoreProvider.of<AppState>(context).dispatch(UpdateCardTokenAction(c['id']));
-                        },
-                      ),
-                    )
-                    )
-                  ).toList()
-                  )
-                )
-              ],
-            );
-          },
-          );
+              ),
+            )
+          ],
+        );
   }
 
-  Widget _receiptTab(){
+  Widget _cardsTab(state) {
+        _addCard(cardToken) async {
+          final User user = state.user;
+          // update a user's data to include cardToken (PUT /users/:id)
+          await http.put('http://localhost:1337/users/${user.id}',
+              body: {"card_token": cardToken},
+              headers: {'Authorization': 'Bearer ${user.jwt}'});
+          // associate cardToken (added card) with stripe customer (POST /card/add)
+          http.Response response = await http.post(
+              'http://localhost:1337/card/add',
+              body: {"source": cardToken, "customer": user.customerId});
+          var responseData = {};
+          if (response.statusCode == 200) {
+            responseData = json.decode(response.body);
+          }
+          return responseData;
+        }
+
+        return Column(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(top: 10.0)),
+            RaisedButton(
+                elevation: 8.0,
+                child: Text('Add card'),
+                onPressed: () async {
+                  final PaymentMethod cardPaymentMethod =
+                      await StripePayment.paymentRequestWithCardForm(
+                          CardFormPaymentRequest());
+                  final String cardToken = cardPaymentMethod.id;
+                  final card = await _addCard(cardToken);
+                  if (card.isNotEmpty) {
+                    // Action to Add card
+                    StoreProvider.of<AppState>(context)
+                        .dispatch(AddCardAction(card));
+                    // Action to updated card token
+                    StoreProvider.of<AppState>(context)
+                        .dispatch(UpdateCardTokenAction(card['id']));
+                    // show snackbar
+                    final snackbar = SnackBar(
+                        content: Text('Card Added!',
+                            style: TextStyle(color: Colors.green)));
+                    _scaffoldKey.currentState.showSnackBar(snackbar);
+                  } else {
+                    // show snackbar
+                    final snackbar = SnackBar(
+                        content: Text('Card Added!',
+                            style: TextStyle(color: Colors.red)));
+                    _scaffoldKey.currentState.showSnackBar(snackbar);
+                  }
+                }),
+            Expanded(
+                child: ListView(
+                    children: state.cards
+                        .map<Widget>((c) => (ListTile(
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.deepOrange,
+                                child: Icon(Icons.credit_card,
+                                    color: Colors.white),
+                              ),
+                              title: Text(
+                                  "${c['card']['exp_month']}/${c['card']['exp_year']}, ${c['card']['last4']}"),
+                              subtitle: Text(c['card']['brand']),
+                              trailing: state.cardToken == c['id']
+                                  ? Chip(
+                                      avatar: CircleAvatar(
+                                        backgroundColor: Colors.green,
+                                        child: Icon(Icons.check_circle,
+                                            color: Colors.white),
+                                      ),
+                                      label: Text('Primary Card'),
+                                    )
+                                  : FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                      child: Text(
+                                        'Set as Primary',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.pink),
+                                      ),
+                                      onPressed: () {
+                                        StoreProvider.of<AppState>(context)
+                                            .dispatch(
+                                                UpdateCardTokenAction(c['id']));
+                                      },
+                                    ),
+                            )))
+                        .toList()))
+          ],
+        );
+  }
+
+  Widget _receiptTab(state) {
     return Text('orders');
+  }
+
+  /**
+   * Utility function to calculate total price
+   * of products in the cart
+   * @return String price to 2 decimal places
+   */
+  String calculateTotalPrice(cartProducts) {
+    double totalPrice = 0.0;
+    cartProducts.forEach((cartProduct){
+      totalPrice += cartProduct.price;
+    });
+    return totalPrice.toStringAsFixed(2);
+  }
+
+  Future _showCheckoutDialog(state) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context){
+        if (state.cards.length == 0){
+          return AlertDialog(
+            title: Row(children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(right: 10.0),
+                child: Text('Add Card'),
+              ),
+              Icon(Icons.credit_card, size: 60.0)
+            ],),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text('Provide a credit card before checking out', style: Theme.of(context).textTheme.body1)
+                ]
+              )
+            ),
+          );
+        }
+        String cartSummary = '';
+        state.cartProducts.forEach((cartProduct) {
+          cartSummary += "° ${cartProduct.name}, \$${cartProduct.price}\n";
+        });
+        final primaryCard = state.cards.singleWhere((card) => card['id'] == state.cardToken)['card'];
+        return AlertDialog(
+            title: Text('Checkout'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text('CART ITEMS (${state.cartProducts.length})\n', style: Theme.of(context).textTheme.body1),
+                  Text('$cartSummary', style: Theme.of(context).textTheme.body1),
+                  Text('CARD DETAILS\n', style: Theme.of(context).textTheme.body1),
+                  Text('Brand: ${primaryCard['brand']}', style: Theme.of(context).textTheme.body1),
+                  Text('Card  Number: ${primaryCard['last4']}', style: Theme.of(context).textTheme.body1),
+                  Text('Expires On: ${primaryCard['exp_month']}/${primaryCard['exp_year']}\n', style: Theme.of(context).textTheme.body1),
+                  Text('ORDER TOTAL: \$${calculateTotalPrice(state.cartProducts)}', style: Theme.of(context).textTheme.body1),
+                ]
+              )
+            ),
+            actions: <Widget>[
+              FlatButton(onPressed: () => Navigator.pop(context, false), color: Colors.red,
+              child: Text('Close', style: TextStyle(color: Colors.white)),),
+              RaisedButton(onPressed: () => Navigator.pop(context, true), color: Colors.green, 
+              child: Text('Checkout', style: TextStyle(color: Colors.white)),)
+            ],
+          );
+      }
+    ).then((value){
+      if(value == true){
+        print('Cart checked out');
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return DefaultTabController(
-      length: 3,
-      initialIndex: 0,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: AppBar(
-          title: Text('Cart Page'),
-          bottom: TabBar(
-            labelColor: Colors.yellow[600],
-            unselectedLabelColor: Colors.yellow[900],
-            tabs: <Widget>[
-              Tab(icon: Icon(Icons.shopping_cart)),
-              Tab(icon: Icon(Icons.credit_card)),
-              Tab(icon: Icon(Icons.receipt)),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: <Widget>[
-            _cartTab(),
-            _cardsTab(),
-            _receiptTab()
-          ],
-        ),
-      ),
-    );
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (_, state) {
+          return DefaultTabController(
+            length: 3,
+            initialIndex: 0,
+            child: Scaffold(
+              key: _scaffoldKey,
+              floatingActionButton: state.cartProducts.length > 0
+                ? FloatingActionButton(
+                    child: Icon(Icons.local_atm, size: 30.0),
+                    onPressed: () => _showCheckoutDialog(state),
+                  )
+                : Text(''),
+              appBar: AppBar(
+                title: Text('Summary: ${state.cartProducts.length} Items . \$${calculateTotalPrice(state.cartProducts)}'),
+                bottom: TabBar(
+                  labelColor: Colors.yellow[600],
+                  unselectedLabelColor: Colors.yellow[900],
+                  tabs: <Widget>[
+                    Tab(icon: Icon(Icons.shopping_cart)),
+                    Tab(icon: Icon(Icons.credit_card)),
+                    Tab(icon: Icon(Icons.receipt)),
+                  ],
+                ),
+              ),
+              body: TabBarView(
+                children: <Widget>[_cartTab(state), _cardsTab(state), _receiptTab(state)],
+              ),
+            ),
+          );
+        });
   }
-
 }
