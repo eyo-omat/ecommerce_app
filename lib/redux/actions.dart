@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_ecommerce/models/order.dart';
 import 'package:flutter_ecommerce/models/product.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_ecommerce/models/app_state.dart';
@@ -173,4 +174,13 @@ class UpdateCardTokenAction {
   String get cardToken => this._cardToken;
 
   UpdateCardTokenAction(this._cardToken);
+}
+
+/* Order actions */
+class AddOrderAction {
+  final Order _order;
+
+  Order get order => this._order;
+
+  AddOrderAction(this._order);
 }
