@@ -10,6 +10,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 import 'package:http/http.dart' as http;
 import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:intl/intl.dart';
 
 class CartPage extends StatefulWidget {
   final void Function() onInit;
@@ -154,7 +155,7 @@ class CartPageState extends State<CartPage> {
       children: state.orders.length > 0 ? state.orders.map<Widget>((order) => (
         ListTile(
           title: Text('\$${order.amount}'),
-          subtitle: Text('${order.createdAt}'),
+          subtitle: Text(DateFormat('MMM dd, yyyy - kk:mm').format(order.createdAt)),//('${order.createdAt}'),
           leading: CircleAvatar(
             backgroundColor: Colors.green,
             child: Icon(Icons.attach_money, color: Colors.white,),
