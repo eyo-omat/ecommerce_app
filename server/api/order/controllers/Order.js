@@ -57,17 +57,15 @@ module.exports = {
   create: async (ctx) => {
     const { amount, products, customer, source } = ctx.request.body;
     const { email } = ctx.state.user;
-    const charge = {
+
+    await stripe.paymentIntents.create({
       amount: Number(amount) * 100,
       currency: 'usd',
+      payment_method_types: ['card'],
       customer,
-      source,
-      receipt_email: email
-    };
-
-    const idempotencyKey = uuid();
-    await stripe.charges.create(charge, {
-      idempotency_key: idempotencyKey,
+      payment_method: source,
+      receipt_email: email,
+      confirm: 'true'
     });
     
     return strapi.services.order.add({

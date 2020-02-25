@@ -154,7 +154,7 @@ class CartPageState extends State<CartPage> {
       children: state.orders.length > 0 ? state.orders.map<Widget>((order) => (
         ListTile(
           title: Text('\$${order.amount}'),
-          subtitle: Text(order.createdAt),
+          subtitle: Text('${order.createdAt}'),
           leading: CircleAvatar(
             backgroundColor: Colors.green,
             child: Icon(Icons.attach_money, color: Colors.white,),
